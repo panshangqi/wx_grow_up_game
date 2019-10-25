@@ -3,14 +3,26 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
+		"enhance": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"coverView": true,
+		"nodeModules": false,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
 	},
 	"compileType": "game",
-	"libVersion": "1.9.94",
+	"libVersion": "2.9.0",
 	"appid": "wx5a69c3f086af9805",
-	"projectname": "WXRussianBlocks",
+	"projectname": "homeland",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {

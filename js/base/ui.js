@@ -1,3 +1,4 @@
+import pub from './public'
 class Element{
     constructor(){
         this.area = {
@@ -25,8 +26,17 @@ class Element{
     bindEvent(){
 
     }
+}
+let width = pub.screenWidth
+let height = pub.screenHeight
 
-
+//标准单位 736 * 414
+let orgWidth = 736
+let orgHeight = 414
+let rate = height / orgHeight
+export function px(value){
+    console.log(value * rate)
+    return value * rate;
 }
 /**
  * 绘制图片 options
@@ -52,13 +62,16 @@ export class ImageElement extends Element{
         this.img.src = this.src
         this.img.onload = ()=>{
             this.loaded = true
+            this.onload()
             if(typeof fn == 'function')
             {
                 fn()
             }
         }
     }
+    onload(){
 
+    }
     render(ctx){
         if(!super.render(ctx)) return
         //console.log(this.img.width, this.img.height)
@@ -73,8 +86,8 @@ export class ImageElement extends Element{
         this.sx = options.sx == undefined ? 0: options.sx
         this.sy = options.sy == undefined ? 0: options.sy
 
-        console.log(this.img)
-        ctx.save()
+        console.log(this.x, this.y, this.w, this.h)
+        //ctx.save()
         ctx.drawImage(
             this.img,
             this.sx,
@@ -86,8 +99,7 @@ export class ImageElement extends Element{
             this.w,
             this.h
         )
-
-        ctx.restore()
+        //ctx.restore()
     }
 }
 
@@ -97,13 +109,12 @@ export class Button extends Element{
         this.text = options.text
         this.x = options.x == undefined ? 0 : options.x
         this.y = options.y == undefined ? 0 : options.y
-        this.w = options.w == undefined ? 0 : options.w
-        this.h = options.h == undefined ? 0 : options.h
+        this.w = options.w == undefined ? 120 : options.w
+        this.h = options.h == undefined ? 30 : options.h
         this.fontSize = options.fontSize == undefined ? 12: options.fontSize
         this.fontColor = options.fontColor == undefined ? '#000': options.fontColor
         this.background = options.background == undefined ? '#fff': options.background
         this.textAlign = options.textAlign == undefined ? 'center': options.textAlign
-        this.textBaseline = options.textBaseline == undefined ? 'middle': options.textBaseline
         this.textBaseline = options.textBaseline == undefined ? 'middle': options.textBaseline
         this.textTop = options.textTop == undefined ? 0: options.textTop
         this.textLeft = options.textLeft == undefined ? 0: options.textLeft
@@ -114,7 +125,7 @@ export class Button extends Element{
         ctx.fillRect(this.x, this.y, this.w, this.h)
         if(this.text){
             ctx.fillStyle = this.fontColor
-            ctx.font    = this.font + "px Arial"
+            ctx.font    = this.fontSize + "px Arial"
             ctx.textAlign = this.textAlign
             ctx.textBaseline = this.textBaseline
             ctx.fillText(
@@ -124,7 +135,60 @@ export class Button extends Element{
             )
         }
     }
+}
+export class ImageButton extends ImageElement{
+    constructor(options, fn) {
+        super(options, fn)
+        this.text = options.text == undefined ? 'text': options.text
+        this.fontSize = options.fontSize == undefined ? 12: options.fontSize
+        this.fontColor = options.fontColor == undefined ? '#ffffff': options.fontColor
+        this.textAlign = options.textAlign == undefined ? 'center': options.textAlign
+        this.textBaseline = options.textBaseline == undefined ? 'middle': options.textBaseline
+        this.textTop = options.textTop == undefined ? 0: options.textTop
+        this.textLeft = options.textLeft == undefined ? 0: options.textLeft
+    }
+    render(ctx){
+        super.render(ctx)
+        ctx.save();
+        ctx.fillStyle = this.fontColor
+        ctx.font    = this.fontSize + "px Arial"
+        ctx.textAlign = this.textAlign
+        ctx.textBaseline = this.textBaseline
+        ctx.fillText(
+            this.text,
+            this.x+ (this.textAlign==='center'?this.w/2:0)+this.textLeft,
+            this.y+(this.textBaseline==='middle'?this.h/2:0)+this.textTop
+        )
+        console.log('text',this.text)
+        ctx.restore()
+    }
 
+}
+export class Text extends Element{
+    constructor(options){
+        super()
+        this.text = options.text
+        this.x = options.x == undefined ? 0 : options.x
+        this.y = options.y == undefined ? 0 : options.y
+        this.fontSize = options.fontSize == undefined ? 12: options.fontSize
+        this.fontColor = options.fontColor == undefined ? '#000000': options.fontColor
+        this.background = options.background
+        this.maxWidth   = options.maxWidth===undefined?false:true
+    }
+    render(ctx){
+        if(!super.render(ctx)) return
+        ctx.save();
+        ctx.fillStyle = this.fontColor
+        ctx.textAlign = "left"
+        ctx.textBaseline = "top"
+        ctx.font = this.fontSize + "px sans-serif"
+        ctx.fillText(
+            this.text,
+            this.x,
+            this.y
+        )
+        ctx.restore()
+    }
 }
 export class Line extends Element{
     /**

@@ -26,3 +26,5 @@
 
 //"appid": "wx3a1e740e19998e28",
 
+/*portrait*/
+landscape

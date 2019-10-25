@@ -1,19 +1,21 @@
+
 import myImage from './src/image.js'
 import App from './base/app'
 import Login from './runtime/login'
 import Play from './runtime/play'
+import Home from './runtime/home'
 let context = canvas.getContext('2d')
 export default class Main extends App{
     constructor(){
         super(context)
         this.top = 0
         this.ctx = context
-        console.log(canvas.width, canvas.height)
+        console.log(window.screenWidth)
         //this.start()
         //this.init()
 
-        this.userInfo = wx.getStorageSync('userInfo')
-        console.log(this.userInfo)
+        //this.userInfo = wx.getStorageSync('userInfo')
+        //console.log(this.userInfo)
         // wx.checkSession({
         //     success: function(){
         //         console.log('success login')
@@ -32,10 +34,14 @@ export default class Main extends App{
     }
     init(){
         super.init()
-        console.log('main init')
+        console.log('main init', this.pages.length)
         this.registerPage('login', new Login(this, this.ctx))
         this.registerPage('play', new Play(this, this.ctx))
-        this.linkTo(undefined, {url: 'login'})
+        this.registerPage('home', new Home(this, this.ctx))
+        //
+    }
+    onShow(){
+        this.linkTo(undefined, {url: 'home'})
     }
     login(){
         wx.login({
